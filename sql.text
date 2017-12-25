@@ -19,3 +19,5 @@ INTERVAL(numtodsinterval(1,'DAY'))
 );
 
 alter table AMV_PBMSG_POS add constraint PK_AMV_PBMSG_POS primary key (DEV_CODE);
+
+000000000
