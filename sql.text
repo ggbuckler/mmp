@@ -1,0 +1,21 @@
+手机银行推广成功办理
+
+select case when count(*)<=1 then count(*) when count(*)>1 then 1 end as amount from mobile_bank_extension_record m left join nbc_t_usr_reg_info nu on nu.mobile=m.phone and nu.user_name=m.customer_name left join nbc_t_pmt_flow_list np on nu.user_id=np.user_id where(select t.coun_cd from t88_inn_org_coun_cd t left join amv_pbmsg_pos p on t.inn_org_id=p.dev_bank left join mobile_bank_extension_record m on p.pos_merch=m.mch_no where m.mch_no='#nullmerNo' group by m.mch_no)=(select t.coun_cd from t88_inn_org_coun_cd t left join nbc_t_usr_reg_info nu on t.inn_org_id=nu.branch_id left join mobile_bank_extension_record m on nu.mobile=m.phone and nu.user_name=m.customer_name where m.mch_no='#nullmerNo' group by m.mch_no) and nu.user_cert_level>='04' and np.trans_stat='N' and (nu.reg_time between m.apply_time and date_add(m.apply_time,interval 10 day)) and (np.trans_date between nu.reg_time and date_add(nu.reg_time,interval 10 day))
+
+
+-Xms512m
+-Xmx1024m
+-XX:PermSize=512m
+-XX:MaxPermSize=1024m
+
+
+insert into T03_DPST_DTL(DATA_DT,DPST_DTL_ID,DTL_ORDR_NUM,ACCT_PRD,TX_DT,ACCTI_DT,HOST_SEQ_NUM,TELLR_SEQ_NUM,ACCT_NUM,ACCT_MODI,TX_ORG_ID,IMPT_MED_ID,CUR_CD,TX_TM,STRK_BAL_DT,AMT,BAL,INT_RATE_VAL,INT_TAX,INT_AMT,FEE_AMT,VOUCH_CATE_CD,VOUCH_NUM,TX_CATE_CD,TX_CD,TX_SHT_NM,MEMO_CD,MEMO_DESC,RNW_MOD_CD,CNT_PTY_ORG_ID,CNT_PTY_ACCT_NUM,CNT_PTY_ACCT_MODI,CASH_TRAN_IND,DEBT_CRDT_IND,CASH_FLAG,RTN_GOODS_IND,SPRT_QRY_IND,TERMN_CHNL_TYP_CD,INIT_CHNL_TYP_CD,VOUCH_DT,AGENT_BANK_NUM,RECV_BANK_NUM,ISSU_CARD_BANK_NUM,PRE_AUTH_NUM,CNT_PTY_ACCT_FST_NM,BE_ERAS_PAY_DTL_ID,MAIN_ADDT_CARD_IND,MERCHT_ID,TX_STAT_CD,TX_TELLR_ID,AUTH_TELLR_ID,DATA_SRC_CD,MAIN_SRC_TASK) values('2017-11-14 00:00:00.0','2063000002149535254235','26551','201711','2017-11-14','2017-11-14',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
+
+
+PARTITION BY RANGE(data_dt)  
+INTERVAL(numtodsinterval(1,'DAY'))  
+(  
+ PARTITION part_20170419 VALUES LESS THAN(TO_DATE('2017-04-20','YYYY-MM-DD'))  
+);
+
+alter table AMV_PBMSG_POS add constraint PK_AMV_PBMSG_POS primary key (DEV_CODE);
